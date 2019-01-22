@@ -22,7 +22,12 @@ ui <- fluidPage(
                      "Number of runs:",
                      min = 10,
                      max = 10000,
-                     value = 100)
+                     value = 100),
+         sliderInput("mean",
+                     "Lognormal Mean Concentration:",
+                     min = 0.001,
+                     max = 100,
+                     value = 10)
       ),
       
       # Show a plot of the generated distribution
@@ -37,7 +42,7 @@ server <- function(input, output) {
    
    output$distPlot <- renderPlot({
      
-     soildata <- rlnorm(n=100,meanlog=10,sdlog=1)  # create distribution of soil concentrations (fake but log normal for the moment)
+     soildata <- rlnorm(n=100,meanlog=input$mean,sdlog=1)  # create distribution of soil concentrations (fake but log normal for the moment)
      amountexposed <- seq(0.1,0.9,0.1)             # percent of diet based on contaminated soil
      massdist <- seq(125,175,5)                    # birds of a range of masses
      seedbsaf <- c(0.11,0.45)                      # vector of seed bsaf data from D'Hollander
@@ -62,11 +67,10 @@ server <- function(input, output) {
      }
      plot(density(log10(birdsoilresample)))       # plot log10 distribution of uptake values
      abline(v=median(log10(birdsoilresample)),lty=2)
-     text(6,0.2,bquote(paste("Median=",.(round(median(log10(birdsoilresample)),3)))))
+     text(median(log10(birdsoilresample))+1,0.2,bquote(paste("Median=",.(round(median(log10(birdsoilresample)),3)))))
      
    })
 }
 
 # Run the application 
 shinyApp(ui = ui, server = server)
-
