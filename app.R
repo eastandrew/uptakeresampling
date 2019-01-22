@@ -72,7 +72,7 @@ server <- function(input, output) {
      }
      sdat <- summary(log10(birdsoilresample))
      summStr <- paste(names(sdat), format(sdat, digits = 2), collapse = "; ")
-     plot(density(log10(birdsoilresample)),ylim=c(-0.1,1))       # plot log10 distribution of uptake values
+     plot(density(log10(birdsoilresample)),ylim=c(-0.1,1),main="log10 Uptake as mg/kg/day")       # plot log10 distribution of uptake values
      segments(median(log10(birdsoilresample)),0,median(log10(birdsoilresample)),0.2,lty=2)
      text(median(log10(birdsoilresample)),-0.1,bquote(paste("Median=",.(round(median(log10(birdsoilresample)),3)))))
      text(median(log10(birdsoilresample)),0.95,summStr,cex=0.75)
