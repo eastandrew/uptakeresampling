@@ -49,7 +49,7 @@ server <- function(input, output) {
      
      soildata <- rlnorm(n=100,meanlog=input$mean,sdlog=input$sd)  # create distribution of soil concentrations (fake but log normal for the moment)
      amountexposed <- seq(0.1,0.9,0.1)             # percent of diet based on contaminated soil
-     massdist <- seq(125,175,5)                    # birds of a range of masses
+     massdist <- seq(100,200,5)                    # birds of a range of masses
      seedbsaf <- c(0.11,0.45)                      # vector of seed bsaf data from D'Hollander
      insbsaf <- c(60,35,68,7.1)                    # vector of invert bsaf data from D'Hollander
      birdsoilresample <- c()                       # create vector for the final bird uptake data "resampling method"
@@ -61,7 +61,7 @@ server <- function(input, output) {
      dirt <- c()
      for(i in 1:input$runs)                              # repeat resampling 1000 (or other obvs) times
      {
-       ratiobug2[i] <- sample(c(0.25,0.5,0.75),1)        # sample from a proportion of diet as inverts
+       ratiobug2[i] <- sample(c(0.1,0.25,0.5,0.75,0.9),1)        # sample from a proportion of diet as inverts
        ratioins2[i] <- ratiobug2[i]*(1-0.1)              # remove the soil ingestion rate from the percent of diet as bugs/seeds.  SIR is 0.1 here
        ratioseed2[i] <- (1-ratiobug2[i])*(1-0.1)         # from remainder of (1-SIR)-bug% calculate percent as seeds
        massselect[i] <- sample(massdist,1)               # pick a random bird's mass
