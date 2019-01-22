@@ -27,7 +27,12 @@ ui <- fluidPage(
                      "Lognormal Mean Concentration:",
                      min = 0.001,
                      max = 100,
-                     value = 10)
+                     value = 10),
+         sliderInput("sd",
+                     "Lognormal Standard Deviation Concentration:",
+                     min = 0.0001,
+                     max = 10,
+                     value = 1)
       ),
       
       # Show a plot of the generated distribution
@@ -42,7 +47,7 @@ server <- function(input, output) {
    
    output$distPlot <- renderPlot({
      
-     soildata <- rlnorm(n=100,meanlog=input$mean,sdlog=1)  # create distribution of soil concentrations (fake but log normal for the moment)
+     soildata <- rlnorm(n=100,meanlog=input$mean,sdlog=input$sd)  # create distribution of soil concentrations (fake but log normal for the moment)
      amountexposed <- seq(0.1,0.9,0.1)             # percent of diet based on contaminated soil
      massdist <- seq(125,175,5)                    # birds of a range of masses
      seedbsaf <- c(0.11,0.45)                      # vector of seed bsaf data from D'Hollander
@@ -65,12 +70,17 @@ server <- function(input, output) {
        # below= picking random bsaf values and percent on contaminated soil and then combine all values to estimate uptake
        birdsoilresample[i] <- (((sample(seedbsaf,1)*dirt[i]*firselect[i]*ratioseed2[i])+(sample(insbsaf,1)*dirt[i]*firselect[i]*ratioins2[i])+(dirt[i]*firselect[i]*0.1))*sample(amountexposed,1))/massselect[i]
      }
-     plot(density(log10(birdsoilresample)))       # plot log10 distribution of uptake values
-     abline(v=median(log10(birdsoilresample)),lty=2)
-     text(median(log10(birdsoilresample))+1,0.2,bquote(paste("Median=",.(round(median(log10(birdsoilresample)),3)))))
+     sdat <- summary(log10(birdsoilresample))
+     summStr <- paste(names(sdat), format(sdat, digits = 2), collapse = "; ")
+     plot(density(log10(birdsoilresample)),ylim=c(-0.1,1))       # plot log10 distribution of uptake values
+     segments(median(log10(birdsoilresample)),0,median(log10(birdsoilresample)),0.2,lty=2)
+     text(median(log10(birdsoilresample)),-0.1,bquote(paste("Median=",.(round(median(log10(birdsoilresample)),3)))))
+     text(median(log10(birdsoilresample)),0.95,summStr,cex=0.75)
+     
      
    })
 }
 
 # Run the application 
 shinyApp(ui = ui, server = server)
+
