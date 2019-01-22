@@ -45,7 +45,8 @@ ui <- fluidPage(
 # Define server logic required to draw a histogram
 server <- function(input, output) {
    
-        
+   output$distPlot <- renderPlot({
+     
      soildata <- rlnorm(n=100,meanlog=input$mean,sdlog=input$sd)  # create distribution of soil concentrations (fake but log normal for the moment)
      amountexposed <- seq(0.1,0.9,0.1)             # percent of diet based on contaminated soil
      massdist <- seq(100,200,5)                    # birds of a range of masses
@@ -71,19 +72,15 @@ server <- function(input, output) {
      }
      sdat <- summary(log10(birdsoilresample))
      summStr <- paste(names(sdat), format(sdat, digits = 2), collapse = "; ")
-   
-   output$distPlot <- renderPlot({
-
      plot(density(log10(birdsoilresample)),ylim=c(-0.1,1),main="log10 Uptake as mg/kg/day")       # plot log10 distribution of uptake values
      segments(median(log10(birdsoilresample)),0,median(log10(birdsoilresample)),0.2,lty=2)
      text(median(log10(birdsoilresample)),-0.1,bquote(paste("Median=",.(round(median(log10(birdsoilresample)),3)))))
      text(median(log10(birdsoilresample)),0.95,summStr,cex=0.75)
-         
+      plot(log10(birdsoilresample)~massselect)
+     
+     
    })
-   
-   
 }
 
 # Run the application 
 shinyApp(ui = ui, server = server)
-
