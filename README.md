@@ -3,5 +3,7 @@ Probabilisitic "bootstrap"-esque method to resample dietary uptake of contaminan
 
 
 In R:
-library(shiny)
-runGitHub("uptakeresampling", "eastandrew") 
+
+`library(shiny)`
+
+`runGitHub("uptakeresampling", "eastandrew")`
