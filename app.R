@@ -83,7 +83,7 @@ server <- function(input, output) {
     dirt <- c()
     for(i in 1:input$runs)                              # repeat resampling 1000 (or other obvs) times
     {
-      ratiobug2[i] <- sample(c(0.1,0.25,0.5,0.75,0.9),1)        # sample from a proportion of diet as inverts
+      ratiobug2[i] <- sample(c(0.01,0.1,0.25,0.5,0.75,0.9,0.99),1)        # sample from a proportion of diet as inverts
       ratioins2[i] <- ratiobug2[i]*(1-0.1)              # remove the soil ingestion rate from the percent of diet as bugs/seeds.  SIR is 0.1 here
       ratioseed2[i] <- (1-ratiobug2[i])*(1-0.1)         # from remainder of (1-SIR)-bug% calculate percent as seeds
       massselect[i] <- sample(massdist,1)               # pick a random bird's mass
@@ -120,7 +120,7 @@ server <- function(input, output) {
     lines(newx, conf_interval[,2], col="blue", lty=2)
     lines(newx, conf_interval[,3], col="blue", lty=2)
     mtext(bquote(paste("r^2=",.(round(sumlm1$r.squared,2))," Slope=",.(round(sumlm1$coefficients[2,1],2))," Int=",.(round(sumlm1$coefficients[1,1],2)))), side=1, line=2.2,cex=0.75)
-    
+    plot(logbird~ratiobug2)
     
   })
   
