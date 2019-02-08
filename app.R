@@ -42,7 +42,17 @@ ui <- fluidPage(
                   "% Time on Cont. Site:",
                   min=1,
                   max=100,
-                  value=50)
+                  value=50),
+      sliderInput("maxmass",
+                  "Largest Bird Mass:",
+                  min=10,
+                  max=250,
+                  value=150),
+      sliderInput("minmass",
+                  "Smallest Bird Mass:",
+                  min=10,
+                  max=250,
+                  value=100)
     ),
     
     # Show a plot of the generated distribution
@@ -61,7 +71,7 @@ server <- function(input, output) {
   output$distPlot <- renderPlot({
     soildata <- rlnorm(n=input$Numsoil,meanlog=input$mean,sdlog=input$sd)  # create distribution of soil concentrations (fake but log normal for the moment)
     amountexposed <- input$time/100#seq(0.1,0.9,0.1)             # percent of diet based on contaminated soil
-    massdist <- seq(100,200,5)                    # birds of a range of masses
+    massdist <- seq(input$minmass,input$maxmass,length.out=10)                    # birds of a range of masses
     seedbsaf <- c(0.11,0.45)                      # vector of seed bsaf data from D'Hollander
     insbsaf <- c(60,35,68,7.1)                    # vector of invert bsaf data from D'Hollander
     birdsoilresample <- c()                       # create vector for the final bird uptake data "resampling method"
@@ -99,12 +109,12 @@ server <- function(input, output) {
     segments(median(log10(birdsoilresample)),0,median(log10(birdsoilresample)),0.2,lty=2)
     text(median(log10(birdsoilresample)),-0.1,bquote(paste("Median=",.(round(median(log10(birdsoilresample)),3)))))
     text(min(log10(birdsoilresample)),0.9,summStr,cex=0.75)
-    text(max(log10(birdsoilresample)),0.9,"log10 Uptake\nas mg/kg/day",cex=0.75)
+    text(max(log10(birdsoilresample)),0.9,"log10 Uptake\nas mg/kg/day",cex=1)
     plot(density(log10(soildata)),ylim=c(-0.2,1.2),main="")
     segments(median(log10(soildata)),0,median(log10(soildata)),0.2,lty=2)
     text(median(log10(soildata)),-0.1,bquote(paste("Median=",.(round(median(log10(soildata)),3)))))
     text(min(log10(soildata)),0.9,summStrsoi,cex=0.75)
-    text(max(log10(soildata)),0.9,"log10 Soil\nConcentrations Sampled",cex=0.75)
+    text(max(log10(soildata)),0.9,"log10 Soil\nConcentrations\nSampled",cex=1)
     plot(logbird~logdirt,main="",ylab="log10 Uptake",xlab="log10 Soil Concentration", pch=16, cex=0.75)
     abline(lm1, col="lightblue", lwd=3)
     lines(newx, conf_interval[,2], col="blue", lty=2)
