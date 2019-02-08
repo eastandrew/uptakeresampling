@@ -122,7 +122,7 @@ server <- function(input, output) {
     mtext(bquote(paste("r^2=",.(round(sumlm1$r.squared,2))," Slope=",.(round(sumlm1$coefficients[2,1],2))," Int=",.(round(sumlm1$coefficients[1,1],2)))), side=1, line=2.2,cex=0.75)
     plot(logbird~ratiobug2)
     
-  })
+  },height=750,width=800)
   
   
   
