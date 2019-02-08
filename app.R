@@ -37,7 +37,12 @@ ui <- fluidPage(
                   "Number of Soil Samples:",
                   min=2,
                   max=10000,
-                  value=100)
+                  value=100),
+      sliderInput("time",
+                  "% Time on Cont. Site:",
+                  min=1,
+                  max=100,
+                  value=50)
     ),
     
     # Show a plot of the generated distribution
@@ -55,7 +60,7 @@ server <- function(input, output) {
   
   output$distPlot <- renderPlot({
     soildata <- rlnorm(n=input$Numsoil,meanlog=input$mean,sdlog=input$sd)  # create distribution of soil concentrations (fake but log normal for the moment)
-    amountexposed <- seq(0.1,0.9,0.1)             # percent of diet based on contaminated soil
+    amountexposed <- input$time/100#seq(0.1,0.9,0.1)             # percent of diet based on contaminated soil
     massdist <- seq(100,200,5)                    # birds of a range of masses
     seedbsaf <- c(0.11,0.45)                      # vector of seed bsaf data from D'Hollander
     insbsaf <- c(60,35,68,7.1)                    # vector of invert bsaf data from D'Hollander
@@ -104,7 +109,7 @@ server <- function(input, output) {
     abline(lm1, col="lightblue", lwd=3)
     lines(newx, conf_interval[,2], col="blue", lty=2)
     lines(newx, conf_interval[,3], col="blue", lty=2)
-    mtext(bquote(paste("r^2=",.(round(sumlm1$r.squared,2))," Slope=",.(round(sumlm1$coefficients[2,1],2)))), side=1, line=2.2,cex=0.75)
+    mtext(bquote(paste("r^2=",.(round(sumlm1$r.squared,2))," Slope=",.(round(sumlm1$coefficients[2,1],2))," Int=",.(round(sumlm1$coefficients[1,1],2)))), side=1, line=2.2,cex=0.75)
     
     
   })
