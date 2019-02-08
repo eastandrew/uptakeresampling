@@ -19,7 +19,7 @@ ui <- fluidPage(
   sidebarLayout(
     sidebarPanel(
       sliderInput("runs",
-                  "Number of runs:",
+                  "Number of simulations:",
                   min = 10,
                   max = 10000,
                   value = 100),
@@ -39,7 +39,7 @@ ui <- fluidPage(
                   max=10000,
                   value=100),
       sliderInput("time",
-                  "% Time on Cont. Site:",
+                  "% Time on Contaminated Site:",
                   min=1,
                   max=100,
                   value=50),
