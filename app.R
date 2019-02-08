@@ -19,7 +19,7 @@ ui <- fluidPage(
   sidebarLayout(
     sidebarPanel(
       sliderInput("runs",
-                  "Number of simulations:",
+                  "Number of runs:",
                   min = 10,
                   max = 10000,
                   value = 100),
@@ -39,7 +39,7 @@ ui <- fluidPage(
                   max=10000,
                   value=100),
       sliderInput("time",
-                  "% Time on Contaminated Site:",
+                  "% Time on Cont. Site:",
                   min=1,
                   max=100,
                   value=50),
@@ -112,8 +112,7 @@ server <- function(input, output) {
     sumlm1 <- summary(lm1)
     newx <- seq(min(logdirt),max(logdirt), length.out=100)
     conf_interval <- predict(lm1, newdata=data.frame(logdirt=newx), interval="confidence",level=0.95)
-    
-    
+
     par(mfrow=c(2,2),mai=c(0.7,0.7,0.1,0.1))
     plot(density(log10(birdsoilresample)),ylim=c(-0.2,1.2),main="")       # plot log10 distribution of uptake values
     segments(median(log10(birdsoilresample)),0,median(log10(birdsoilresample)),0.2,lty=2)
@@ -131,7 +130,7 @@ server <- function(input, output) {
     lines(newx, conf_interval[,3], col="blue", lty=2)
     mtext(bquote(paste("r^2=",.(round(sumlm1$r.squared,2))," Slope=",.(round(sumlm1$coefficients[2,1],2))," Int=",.(round(sumlm1$coefficients[1,1],2)))), side=1, line=2.2,cex=0.75)
     plot(logbird~ratiobug2,pch=16,xlab="Proportion of diet as invertebrates",ylab="log10 Uptake")
-    
+
   },height=700,width=750)
   
   
