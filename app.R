@@ -132,7 +132,7 @@ server <- function(input, output) {
     mtext(bquote(paste("r^2=",.(round(sumlm1$r.squared,2))," Slope=",.(round(sumlm1$coefficients[2,1],2))," Int=",.(round(sumlm1$coefficients[1,1],2)))), side=1, line=2.2,cex=0.75)
     plot(logbird~ratiobug2,pch=16,xlab="Proportion of diet as invertebrates",ylab="log10 Uptake")
     
-  },height=750,width=800)
+  },height=700,width=750)
   
   
   
