@@ -1,5 +1,5 @@
 # Uptake Resampling
-Probabilisitic "bootstrap"-esque method to resample dietary uptake of contaminants in birds.
+Probabilisitic method to resample dietary uptake of contaminants in birds.
 
 
 In R:
